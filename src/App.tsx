@@ -1,7 +1,7 @@
 import { ApolloProvider } from '@apollo/client';
 
-import { graphqlClient } from './graphql/client';
-import { TasksPage } from './pages/Tasks';
+import { graphqlClient } from '@/graphql/client';
+import { TasksPage } from '@/pages/Tasks';
 
 function App() {
   return (
