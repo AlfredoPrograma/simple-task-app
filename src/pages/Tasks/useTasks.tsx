@@ -8,19 +8,23 @@ function generateTableColumns(tasks: Task[]) {
   const columns: GridColDef[] = [
     {
       field: 'id',
-      headerName: 'ID'
+      headerName: 'ID',
+      flex: 1
     },
     {
       field: 'title',
-      headerName: 'Title'
+      headerName: 'Title',
+      flex: 1
     },
     {
       field: 'description',
-      headerName: 'Description'
+      headerName: 'Description',
+      flex: 1
     },
     {
       field: 'completed',
-      headerName: 'Completed'
+      headerName: 'Completed',
+      flex: 1
     }
   ];
 
