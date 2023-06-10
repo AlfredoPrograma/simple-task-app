@@ -1,5 +1,14 @@
+import { ApolloProvider } from '@apollo/client';
+
+import { graphqlClient } from './graphql/client';
+import { TasksPage } from './pages/Tasks';
+
 function App() {
-  return <h1>Hello world</h1>;
+  return (
+    <ApolloProvider client={graphqlClient}>
+      <TasksPage />
+    </ApolloProvider>
+  );
 }
 
 export default App;
