@@ -1,6 +1,10 @@
 export interface Task {
   id: number;
   title: string;
-  decsription: string | null;
+  description: string | null;
   completed: boolean;
+}
+
+export interface GetAllTasksResponse {
+  getAllTasks: Task[];
 }
