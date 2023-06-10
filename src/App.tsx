@@ -1,12 +1,14 @@
+import { RouterProvider } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 
 import { graphqlClient } from '@/graphql/client';
-import { TasksPage } from '@/pages/Tasks';
+
+import { router } from './router';
 
 function App() {
   return (
     <ApolloProvider client={graphqlClient}>
-      <TasksPage />
+      <RouterProvider router={router} />
     </ApolloProvider>
   );
 }
