@@ -2,6 +2,7 @@
 import { Box, Button, Icon, TextField, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { AddTask } from '@mui/icons-material';
+import { LoadingButton } from '@mui/lab';
 import { useForm } from 'react-hook-form';
 
 import { useBoolean } from '@/hooks/useBoolean';
@@ -15,16 +16,26 @@ interface CreateTaskForm {
 }
 
 export function TasksPage() {
-  const { tableData } = useTasks();
+  const { tableData, createTask, getAllTask } = useTasks();
   const { value: isOpen, handleTrue: handleOpen, handleFalse: handleClose } = useBoolean(false);
-  const { register, handleSubmit } = useForm<CreateTaskForm>();
+  const { register, handleSubmit, reset } = useForm<CreateTaskForm>();
 
-  const onSubmit = (data: CreateTaskForm) => {
-    console.log(data);
+  const handleCloseModalForm = () => {
+    handleClose();
+    reset();
+  };
+
+  const onSubmit = async (data: CreateTaskForm) => {
+    await createTask.mutation({
+      variables: data
+    });
+
+    handleCloseModalForm();
   };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      {/* TODO: Move control panel to its own component */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Typography variant="h4" component="h1">
           Tasks list
@@ -53,7 +64,8 @@ export function TasksPage() {
         />
       </Box>
 
-      <Modal title="Add Task" isOpen={isOpen} handleClose={handleClose}>
+      {/* TODO: Move modal to its own component */}
+      <Modal title="Add Task" isOpen={isOpen} handleClose={handleCloseModalForm}>
         <Box
           onSubmit={handleSubmit(onSubmit)}
           component="form"
@@ -61,9 +73,13 @@ export function TasksPage() {
           <TextField label="Title" variant="outlined" {...register('title')} />
           <TextField label="Description" variant="outlined" {...register('description')} />
 
-          <Button type="submit" size="large" variant="contained" color="primary">
+          <LoadingButton
+            type="submit"
+            variant="contained"
+            loading={createTask.loading || getAllTask.loading}
+            size="large">
             Create
-          </Button>
+          </LoadingButton>
         </Box>
       </Modal>
     </Box>

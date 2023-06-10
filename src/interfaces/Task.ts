@@ -8,3 +8,7 @@ export interface Task {
 export interface GetAllTasksResponse {
   getAllTasks: Task[];
 }
+
+export interface CreateTaskResponse {
+  createTask: Task;
+}

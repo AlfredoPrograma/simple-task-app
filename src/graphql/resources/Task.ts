@@ -10,3 +10,14 @@ export const GetAllTasksQuery = gql`
     }
   }
 `;
+
+export const CreateTaskMutation = gql`
+  mutation CreateTask($title: String!, $description: String) {
+    createTask(title: $title, description: $description) {
+      id
+      title
+      description
+      completed
+    }
+  }
+`;

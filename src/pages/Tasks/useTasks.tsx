@@ -1,9 +1,12 @@
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 
-import { GetAllTasksQuery } from '@/graphql/resources/Task';
-import { type GetAllTasksResponse, type Task } from '@/interfaces';
+import { CreateTaskMutation, GetAllTasksQuery } from '@/graphql/resources/Task';
+import { type CreateTaskResponse, type GetAllTasksResponse, type Task } from '@/interfaces';
 import { type GridColDef, type GridRowsProp } from '@mui/x-data-grid';
 
+// TODO: Improve headers styling
+// TODO: Improve table styling
+// TODO: Add icon to completed column
 function generateTableColumns(tasks: Task[]) {
   const columns: GridColDef[] = [
     {
@@ -34,9 +37,30 @@ function generateTableColumns(tasks: Task[]) {
 }
 
 export function useTasks() {
-  const { loading, error, data } = useQuery<GetAllTasksResponse>(GetAllTasksQuery);
+  const {
+    loading: getAllTasksLoading,
+    error: getAllTasksError,
+    data: getAllTasksData
+  } = useQuery<GetAllTasksResponse>(GetAllTasksQuery);
+  const [
+    createTaskMutation,
+    { loading: createTaskLoading, error: createTaskError, data: createTaskData }
+  ] = useMutation<CreateTaskResponse>(CreateTaskMutation, { refetchQueries: ['GetAllTasks'] });
 
-  const tableData = generateTableColumns(data?.getAllTasks ?? []);
+  const tableData = generateTableColumns(getAllTasksData?.getAllTasks ?? []);
 
-  return { loading, error, data, tableData };
+  return {
+    getAllTask: {
+      loading: getAllTasksLoading,
+      error: getAllTasksError,
+      data: getAllTasksData
+    },
+    createTask: {
+      mutation: createTaskMutation,
+      loading: createTaskLoading,
+      error: createTaskError,
+      data: createTaskData
+    },
+    tableData
+  };
 }

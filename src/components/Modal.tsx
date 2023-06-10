@@ -9,8 +9,6 @@ interface ModalProps {
 }
 
 export function Modal({ isOpen, handleClose, title, children }: ModalProps) {
-  console.log('here');
-
   return (
     <Dialog
       sx={{
