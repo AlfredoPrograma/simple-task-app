@@ -2,11 +2,12 @@ import { Box } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 
 import { type TableData } from '@/interfaces/DataTable';
-interface TaskTableProps {
+
+interface DataTableProps {
   tableData: TableData;
 }
 
-export function TasksDataTable({ tableData }: TaskTableProps) {
+export function DataTable({ tableData }: DataTableProps) {
   return (
     <Box>
       <DataGrid

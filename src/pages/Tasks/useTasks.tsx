@@ -33,6 +33,12 @@ function generateTableColumns(tasks: Task[]) {
       field: 'completed',
       headerName: 'Completed',
       flex: 1
+    },
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      flex: 1,
+      renderCell: () => <h1>XD</h1>
     }
   ];
 

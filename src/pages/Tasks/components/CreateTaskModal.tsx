@@ -4,7 +4,7 @@ import { Box, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useForm } from 'react-hook-form';
 
-import { Modal } from '@/components/Modal';
+import { Modal } from '@/components';
 import { type CreateTaskResponse } from '@/interfaces';
 
 interface CreateTaskForm {

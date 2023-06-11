@@ -1,9 +1,10 @@
 import { Box } from '@mui/material';
 
+import { DataTable } from '@/components';
 import { useBoolean } from '@/hooks/useBoolean';
 
 import { useTasks } from './useTasks';
-import { ControlTasksPanel, CreateTaskModal, TasksDataTable } from './components';
+import { ControlTasksPanel, CreateTaskModal } from './components';
 
 export function TasksPage() {
   const { tableData, createTask, getAllTask } = useTasks();
@@ -13,7 +14,7 @@ export function TasksPage() {
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
       <ControlTasksPanel openModal={openModal} />
 
-      <TasksDataTable tableData={tableData} />
+      <DataTable tableData={tableData} />
 
       <CreateTaskModal
         open={isOpenModal}
