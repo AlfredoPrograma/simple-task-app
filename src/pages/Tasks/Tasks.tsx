@@ -1,11 +1,9 @@
 import { Box } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
 
 import { useBoolean } from '@/hooks/useBoolean';
 
 import { useTasks } from './useTasks';
-import { CreateTaskModal } from './components/CreateTaskModal';
-import { ControlTasksPanel } from './components/ControlTasksPanel';
+import { ControlTasksPanel, CreateTaskModal, TasksDataTable } from './components';
 
 export function TasksPage() {
   const { tableData, createTask, getAllTask } = useTasks();
@@ -15,17 +13,7 @@ export function TasksPage() {
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
       <ControlTasksPanel openModal={openModal} />
 
-      <Box>
-        <DataGrid
-          columns={tableData.columns}
-          rows={tableData.rows}
-          disableColumnFilter
-          disableColumnSelector
-          disableDensitySelector
-          disableColumnMenu
-          hideFooterSelectedRowCount
-        />
-      </Box>
+      <TasksDataTable tableData={tableData} />
 
       <CreateTaskModal
         open={isOpenModal}
