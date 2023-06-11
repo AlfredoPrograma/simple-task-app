@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
 
-import { CreateTaskMutation, GetAllTasksQuery } from '@/graphql/resources/Task';
+import { CreateTaskMutation, DeleteTaskMutation, GetAllTasksQuery, UpdateTaskMutation } from '@/graphql/resources/Task';
 import {
   type CreateTaskForm,
   type CreateTaskResponse,
@@ -8,11 +8,13 @@ import {
   type Task
 } from '@/interfaces';
 import { type GridColDef, type GridRowsProp } from '@mui/x-data-grid';
+import { ActionsButtons } from '@/components';
+import { TableActions } from '@/interfaces/DataTable';
 
 // TODO: Improve headers styling
 // TODO: Improve table styling
 // TODO: Add icon to completed column
-function generateTableColumns(tasks: Task[]) {
+function generateTableColumns(tasks: Task[], actions: TableActions) {
   const columns: GridColDef[] = [
     {
       field: 'id',
@@ -38,7 +40,7 @@ function generateTableColumns(tasks: Task[]) {
       field: 'actions',
       headerName: 'Actions',
       flex: 1,
-      renderCell: () => <h1>XD</h1>
+      renderCell: (row) => <ActionsButtons row={row} actions={actions} />
     }
   ];
 
@@ -60,7 +62,18 @@ export function useTasks() {
     refetchQueries: ['GetAllTasks']
   });
 
-  const tableData = generateTableColumns(getAllTasksData?.getAllTasks ?? []);
+  const [updateTaskMutation] = useMutation(UpdateTaskMutation, {
+    refetchQueries: ['GetAllTasks']
+  });
+
+  const [deleteTaskMutation] = useMutation(DeleteTaskMutation, {
+    refetchQueries: ['GetAllTasks']
+  });
+
+  const tableData = generateTableColumns(getAllTasksData?.getAllTasks ?? [], {
+    deleteMutation: deleteTaskMutation,
+    editMutation: updateTaskMutation
+  });
 
   return {
     getAllTask: {
