@@ -1,5 +1,5 @@
-import { Add } from '@mui/icons-material';
 import { Box, Button, Icon, Typography } from '@mui/material';
+import { Add } from '@mui/icons-material';
 
 interface ControlTasksPanelProps {
   openModal: () => void;

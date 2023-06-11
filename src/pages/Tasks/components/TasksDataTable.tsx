@@ -1,7 +1,7 @@
-import { type TableData } from '@/interfaces/DataTable';
 import { Box } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 
+import { type TableData } from '@/interfaces/DataTable';
 interface TaskTableProps {
   tableData: TableData;
 }

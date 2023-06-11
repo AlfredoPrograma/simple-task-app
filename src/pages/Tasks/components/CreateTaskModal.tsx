@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
+import { type MutationTuple } from '@apollo/client';
+import { Box, TextField } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { useForm } from 'react-hook-form';
+
 import { Modal } from '@/components/Modal';
 import { type CreateTaskResponse } from '@/interfaces';
-import { type MutationTuple } from '@apollo/client';
-import { LoadingButton } from '@mui/lab';
-import { Box, TextField } from '@mui/material';
-import { useForm } from 'react-hook-form';
 
 interface CreateTaskForm {
   title: string;
