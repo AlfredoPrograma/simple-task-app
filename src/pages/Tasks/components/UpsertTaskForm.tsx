@@ -5,41 +5,49 @@ import { LoadingButton } from '@mui/lab';
 import { useForm } from 'react-hook-form';
 
 import { Modal } from '@/components';
-import { type CreateTaskResponse } from '@/interfaces';
+import { UpsertTaskForm, CreateTaskResponse, Task, UpdateTaskResponse, CreateTaskPayload, UpdateTaskPayload } from '@/interfaces';
 
-interface CreateTaskForm {
-  title: string;
-  description: string;
-}
-interface CreateTaskModalProps {
+interface UpsertTaskModalProps {
   open: boolean;
   closeModal: () => void;
-  createTaskMutation: MutationTuple<CreateTaskResponse, CreateTaskForm>[0];
+  createTaskMutation: MutationTuple<CreateTaskResponse, CreateTaskPayload>[0];
+  updateTaskMutation: MutationTuple<UpdateTaskResponse, UpdateTaskPayload>[0];
   isSubmitting: boolean;
+  task: Task | null
 }
 
-export function CreateTaskModal({
+export function UpsertTaskModal({
   open,
   createTaskMutation,
+  updateTaskMutation,
   closeModal,
-  isSubmitting
-}: CreateTaskModalProps) {
-  const { register, handleSubmit, reset } = useForm<CreateTaskForm>();
+  isSubmitting,
+  task
+}: UpsertTaskModalProps) {
+  const { register, handleSubmit, reset } = useForm<UpsertTaskForm>();
+
+  const isEdit = !!task;
 
   const handleCloseModalForm = () => {
     closeModal();
     reset();
   };
 
-  const handleCreateTask = async (data: CreateTaskForm) => {
-    await createTaskMutation({ variables: data });
+  const handleSubmitUpsert = async (data: UpsertTaskForm) => {
+
+    if (isEdit) {
+      await updateTaskMutation({ variables: { ...data, id: task?.id } });
+    } else {
+      await createTaskMutation({ variables: data });
+
+    }
     handleCloseModalForm();
   };
 
   return (
     <Modal title="Add Task" open={open} onClose={handleCloseModalForm}>
       <Box
-        onSubmit={handleSubmit(handleCreateTask)}
+        onSubmit={handleSubmit(handleSubmitUpsert)}
         component="form"
         sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         <TextField label="Title" variant="outlined" {...register('title')} />

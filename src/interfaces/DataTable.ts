@@ -1,12 +1,11 @@
-import { MutationTuple } from '@apollo/client';
-import { type GridColDef, type GridRowsProp } from '@mui/x-data-grid';
+import { GridRenderCellParams, type GridColDef, type GridRowsProp, GridValidRowModel } from '@mui/x-data-grid';
 
 export interface TableData {
   columns: GridColDef[];
   rows: GridRowsProp;
 }
 
-export interface TableActions {
-  editMutation: MutationTuple<any, any>[0];
-  deleteMutation: MutationTuple<any, any>[0];
+export interface TableActions<T extends GridValidRowModel> {
+  editHandler: (row: GridRenderCellParams<T>) => void;
+  deleteHandler: (row: GridRenderCellParams<T>) => void;
 }

@@ -2,19 +2,22 @@ import { useMutation, useQuery } from '@apollo/client';
 
 import { CreateTaskMutation, DeleteTaskMutation, GetAllTasksQuery, UpdateTaskMutation } from '@/graphql/resources/Task';
 import {
-  type CreateTaskForm,
+  CreateTaskPayload,
+  UpdateTaskResponse,
   type CreateTaskResponse,
   type GetAllTasksResponse,
-  type Task
+  type Task,
+  UpdateTaskPayload
 } from '@/interfaces';
 import { type GridColDef, type GridRowsProp } from '@mui/x-data-grid';
 import { ActionsButtons } from '@/components';
 import { TableActions } from '@/interfaces/DataTable';
+import { useResourceModal } from '@/hooks/useResourceModal';
 
 // TODO: Improve headers styling
 // TODO: Improve table styling
 // TODO: Add icon to completed column
-function generateTableColumns(tasks: Task[], actions: TableActions) {
+function generateTableColumns(tasks: Task[], actions: TableActions<Task>) {
   const columns: GridColDef[] = [
     {
       field: 'id',
@@ -50,19 +53,15 @@ function generateTableColumns(tasks: Task[], actions: TableActions) {
 }
 
 export function useTasks() {
-  const {
-    loading: getAllTasksLoading,
-    error: getAllTasksError,
-    data: getAllTasksData
-  } = useQuery<GetAllTasksResponse>(GetAllTasksQuery);
-  const [
-    createTaskMutation,
-    { loading: createTaskLoading, error: createTaskError, data: createTaskData }
-  ] = useMutation<CreateTaskResponse, CreateTaskForm>(CreateTaskMutation, {
+  const { isOpenModal, openModal, closeModal, resource } = useResourceModal<Task>()
+
+  const getAllTasksStatus = useQuery<GetAllTasksResponse>(GetAllTasksQuery);
+
+  const [createTaskMutation, createTaskStatus] = useMutation<CreateTaskResponse, CreateTaskPayload>(CreateTaskMutation, {
     refetchQueries: ['GetAllTasks']
   });
 
-  const [updateTaskMutation] = useMutation(UpdateTaskMutation, {
+  const [updateTaskMutation, updateTaskStatus] = useMutation<UpdateTaskResponse, UpdateTaskPayload>(UpdateTaskMutation, {
     refetchQueries: ['GetAllTasks']
   });
 
@@ -70,22 +69,26 @@ export function useTasks() {
     refetchQueries: ['GetAllTasks']
   });
 
-  const tableData = generateTableColumns(getAllTasksData?.getAllTasks ?? [], {
-    deleteMutation: deleteTaskMutation,
-    editMutation: updateTaskMutation
+  const tableData = generateTableColumns(getAllTasksStatus.data?.getAllTasks ?? [], {
+    editHandler: ({ row }) => openModal(row),
+    deleteHandler: ({ row }) => deleteTaskMutation({ variables: { id: row.id } })
   });
 
   return {
-    getAllTask: {
-      loading: getAllTasksLoading,
-      error: getAllTasksError,
-      data: getAllTasksData
-    },
+    getAllTask: getAllTasksStatus,
     createTask: {
       mutation: createTaskMutation,
-      loading: createTaskLoading,
-      error: createTaskError,
-      data: createTaskData
+      status: createTaskStatus
+    },
+    updateTask: {
+      mutation: updateTaskMutation,
+      status: updateTaskStatus,
+    },
+    upsertTaskModal: {
+      isOpenModal,
+      openModal,
+      closeModal,
+      resource
     },
     tableData
   };

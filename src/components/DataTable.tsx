@@ -10,15 +10,15 @@ interface ActionButtonsProps {
 }
 
 export function ActionsButtons({ actions, row }: ActionButtonsProps) {
-  const { deleteMutation, editMutation } = actions;
+  const { deleteHandler, editHandler } = actions;
 
   return (
     <Stack direction="row">
-      <IconButton onClick={async () => await editMutation()}>
+      <IconButton onClick={async () => await editHandler(row)}>
         <Edit color="primary" />
       </IconButton>
 
-      <IconButton onClick={async () => await deleteMutation({ variables: { id: row.id } })}>
+      <IconButton onClick={async () => await deleteHandler(row)}>
         <Delete color="error" />
       </IconButton>
     </Stack>
