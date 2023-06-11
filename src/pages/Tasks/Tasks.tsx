@@ -1,11 +1,11 @@
-import { Box, Button, Icon, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import { AddTask } from '@mui/icons-material';
 
 import { useBoolean } from '@/hooks/useBoolean';
 
 import { useTasks } from './useTasks';
 import { CreateTaskModal } from './components/CreateTaskModal';
+import { ControlTasksPanel } from './components/ControlTasksPanel';
 
 export function TasksPage() {
   const { tableData, createTask, getAllTask } = useTasks();
@@ -13,22 +13,7 @@ export function TasksPage() {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-      {/* TODO: Move control panel to its own component */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h4" component="h1">
-          Tasks list
-        </Typography>
-
-        <Button
-          onClick={openModal}
-          size="large"
-          sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}
-          variant="contained"
-          color="success">
-          <Icon component={AddTask} />
-          <Typography>Add task</Typography>
-        </Button>
-      </Box>
+      <ControlTasksPanel openModal={openModal} />
 
       <Box>
         <DataGrid
