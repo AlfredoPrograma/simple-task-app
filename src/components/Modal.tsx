@@ -1,21 +1,21 @@
 import { Box, Dialog, IconButton, Typography } from '@mui/material';
 import { Close } from '@mui/icons-material';
 
-interface ModalProps {
+export interface ModalProps {
   children: React.ReactNode;
-  isOpen: boolean;
-  handleClose: () => void;
+  open: boolean;
+  onClose: () => void;
   title: string;
 }
 
-export function Modal({ isOpen, handleClose, title, children }: ModalProps) {
+export function Modal({ open, onClose, title, children }: ModalProps) {
   return (
     <Dialog
       sx={{
         '& .MuiDialog-paper': { padding: '2rem', width: '100%', maxWidth: '500px' }
       }}
-      open={isOpen}
-      onClose={handleClose}>
+      open={open}
+      onClose={onClose}>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         <Box
           component="header"
@@ -24,7 +24,7 @@ export function Modal({ isOpen, handleClose, title, children }: ModalProps) {
             {title}
           </Typography>
 
-          <IconButton onClick={handleClose}>
+          <IconButton onClick={onClose}>
             <Close />
           </IconButton>
         </Box>

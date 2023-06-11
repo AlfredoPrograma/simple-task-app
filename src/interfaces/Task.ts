@@ -12,3 +12,8 @@ export interface GetAllTasksResponse {
 export interface CreateTaskResponse {
   createTask: Task;
 }
+
+export interface CreateTaskForm {
+  title: string;
+  description: string;
+}

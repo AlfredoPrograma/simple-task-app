@@ -1,7 +1,12 @@
 import { useMutation, useQuery } from '@apollo/client';
 
 import { CreateTaskMutation, GetAllTasksQuery } from '@/graphql/resources/Task';
-import { type CreateTaskResponse, type GetAllTasksResponse, type Task } from '@/interfaces';
+import {
+  type CreateTaskForm,
+  type CreateTaskResponse,
+  type GetAllTasksResponse,
+  type Task
+} from '@/interfaces';
 import { type GridColDef, type GridRowsProp } from '@mui/x-data-grid';
 
 // TODO: Improve headers styling
@@ -45,7 +50,9 @@ export function useTasks() {
   const [
     createTaskMutation,
     { loading: createTaskLoading, error: createTaskError, data: createTaskData }
-  ] = useMutation<CreateTaskResponse>(CreateTaskMutation, { refetchQueries: ['GetAllTasks'] });
+  ] = useMutation<CreateTaskResponse, CreateTaskForm>(CreateTaskMutation, {
+    refetchQueries: ['GetAllTasks']
+  });
 
   const tableData = generateTableColumns(getAllTasksData?.getAllTasks ?? []);
 

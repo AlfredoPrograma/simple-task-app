@@ -1,37 +1,15 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
-import { Box, Button, Icon, TextField, Typography } from '@mui/material';
+import { Box, Button, Icon, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { AddTask } from '@mui/icons-material';
-import { LoadingButton } from '@mui/lab';
-import { useForm } from 'react-hook-form';
 
 import { useBoolean } from '@/hooks/useBoolean';
-import { Modal } from '@/components/Modal';
 
 import { useTasks } from './useTasks';
-
-interface CreateTaskForm {
-  title: string;
-  description: string;
-}
+import { CreateTaskModal } from './components/CreateTaskModal';
 
 export function TasksPage() {
   const { tableData, createTask, getAllTask } = useTasks();
-  const { value: isOpen, handleTrue: handleOpen, handleFalse: handleClose } = useBoolean(false);
-  const { register, handleSubmit, reset } = useForm<CreateTaskForm>();
-
-  const handleCloseModalForm = () => {
-    handleClose();
-    reset();
-  };
-
-  const onSubmit = async (data: CreateTaskForm) => {
-    await createTask.mutation({
-      variables: data
-    });
-
-    handleCloseModalForm();
-  };
+  const { value: isOpenModal, handleTrue: openModal, handleFalse: closeModal } = useBoolean(false);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -42,7 +20,7 @@ export function TasksPage() {
         </Typography>
 
         <Button
-          onClick={handleOpen}
+          onClick={openModal}
           size="large"
           sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}
           variant="contained"
@@ -64,24 +42,12 @@ export function TasksPage() {
         />
       </Box>
 
-      {/* TODO: Move modal to its own component */}
-      <Modal title="Add Task" isOpen={isOpen} handleClose={handleCloseModalForm}>
-        <Box
-          onSubmit={handleSubmit(onSubmit)}
-          component="form"
-          sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <TextField label="Title" variant="outlined" {...register('title')} />
-          <TextField label="Description" variant="outlined" {...register('description')} />
-
-          <LoadingButton
-            type="submit"
-            variant="contained"
-            loading={createTask.loading || getAllTask.loading}
-            size="large">
-            Create
-          </LoadingButton>
-        </Box>
-      </Modal>
+      <CreateTaskModal
+        open={isOpenModal}
+        closeModal={closeModal}
+        isSubmitting={createTask.loading || getAllTask.loading}
+        createTaskMutation={createTask.mutation}
+      />
     </Box>
   );
 }
